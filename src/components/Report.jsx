@@ -5,7 +5,8 @@ const Report = () => {
   const [student, setStudent] = useState(null);
   const [students, setStudents] = useState([]);
   const [error, setError] = useState("");
-  const [showAllReports, setShowAllReports] = useState(false); 
+  const [loading, setLoading] = useState(false);
+  const [showAllReports, setShowAllReports] = useState(false);
 
   const fetchStudent = async () => {
     if (!studentId.trim()) {
@@ -13,6 +14,7 @@ const Report = () => {
       return;
     }
     setError("");
+    setLoading(true); // Set loading to true while fetching
     try {
       const response = await fetch(`http://localhost:5000/marks/${studentId}`);
       if (!response.ok) throw new Error("Student not found");
@@ -21,11 +23,14 @@ const Report = () => {
     } catch (error) {
       setStudent(null);
       setError("Student not found.");
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
   const fetchAllStudents = async () => {
     setError("");
+    setLoading(true); // Set loading to true while fetching
     try {
       const response = await fetch("http://localhost:5000/marks");
       const data = await response.json();
@@ -33,11 +38,13 @@ const Report = () => {
       setShowAllReports(true);
     } catch (error) {
       setError("Error fetching student reports.");
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
   const toggleReports = () => {
-    setShowAllReports(!showAllReports); 
+    setShowAllReports(!showAllReports);
   };
 
   return (
@@ -52,13 +59,13 @@ const Report = () => {
           value={studentId}
           onChange={(e) => setStudentId(e.target.value)}
         />
-        <button className="btn btn-primary ms-2" onClick={fetchStudent}>
-          Get Report
+        <button className="btn btn-primary ms-2" onClick={fetchStudent} disabled={loading}>
+          {loading ? "Loading..." : "Get Report"}
         </button>
       </div>
 
-      <button className="btn btn-success mb-3" onClick={fetchAllStudents}>
-        Show All Reports
+      <button className="btn btn-success mb-3" onClick={fetchAllStudents} disabled={loading}>
+        {loading ? "Loading..." : "Show All Reports"}
       </button>
 
       {showAllReports && (
@@ -71,9 +78,15 @@ const Report = () => {
 
       {student && (
         <div className="card p-2 mb-3">
-          <h3 className="text-success">{student.studentName} (ID: {student.studentId})</h3>
-          <p><strong>Total Marks:</strong> {student.total}</p>
-          <p><strong>Marks:</strong> {student.marks.join(", ")}</p>
+          <h3 className="text-success">
+            {student.studentName} (ID: {student.studentId})
+          </h3>
+          <p>
+            <strong>Total Marks:</strong> {student.total}
+          </p>
+          <p>
+            <strong>Marks:</strong> {student.marks.join(", ")}
+          </p>
         </div>
       )}
 
@@ -82,9 +95,15 @@ const Report = () => {
           <h3>All Student Reports</h3>
           {students.map((s, index) => (
             <div key={index} className="border-bottom pb-2 mb-2">
-              <h4 className="text-primary">{s.studentName} (ID: {s.studentId})</h4>
-              <p><strong>Total Marks:</strong> {s.total}</p>
-              <p><strong>Marks:</strong> {s.marks.join(", ")}</p>
+              <h4 className="text-primary">
+                {s.studentName} (ID: {s.studentId})
+              </h4>
+              <p>
+                <strong>Total Marks:</strong> {s.total}
+              </p>
+              <p>
+                <strong>Marks:</strong> {s.marks.join(", ")}
+              </p>
             </div>
           ))}
         </div>
