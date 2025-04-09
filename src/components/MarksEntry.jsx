@@ -16,7 +16,7 @@ const MarksEntry = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://marksapp.onrender.com", {
+      const response = await fetch("https://marksapp.onrender.com/marks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -25,6 +25,7 @@ const MarksEntry = () => {
           marks: marks.map(Number),
         }),
       });
+      
 
       const data = await response.json();
       setMessage(data.message);
