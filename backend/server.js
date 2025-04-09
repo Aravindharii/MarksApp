@@ -70,10 +70,10 @@ app.get("/marks", async (req, res) => {
 });
 
 // ✅ Serve React Frontend (Important)
-app.use(express.static(path.join(__dirname, "../build")));  // Serve frontend build folder
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../build", "index.html"));  // Serve index.html for all routes
-});
+// app.use(express.static(path.join(__dirname, "../build")));  // Serve frontend build folder
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "../build", "index.html"));  // Serve index.html for all routes
+// });
 
 // ✅ Start the Server
 const PORT = process.env.PORT || 5000;
