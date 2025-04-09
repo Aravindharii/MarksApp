@@ -25,21 +25,36 @@ const MarksEntry = () => {
           marks: marks.map(Number),
         }),
       });
-      
 
-      const data = await response.json();
-      setMessage(data.message);
+      if (response.ok) {
+        const data = await response.json();
+        setMessage(data.message || "Marks saved successfully!");
+
+        // ✅ Reset form only on success
+        setStudentId("");
+        setStudentName("");
+        setMarks(["", "", "", "", ""]);
+      } else {
+        const errorData = await response.json();
+        setMessage(errorData.message || "Failed to save marks.");
+      }
+
+      // ⏳ Clear message after 3s
+      setTimeout(() => setMessage(""), 3000);
     } catch (error) {
       console.error("Error saving marks:", error);
+      setMessage("Failed to save marks. Server error.");
+      setTimeout(() => setMessage(""), 3000);
     }
   };
 
   return (
-    <div>
-      <h2>Enter Student Marks</h2>
+    <div className="container card p-4 shadow mt-4">
+      <h2 className="text-center mb-3">Enter Student Marks</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
+          className="form-control mb-2"
           placeholder="Student ID"
           value={studentId}
           onChange={(e) => setStudentId(e.target.value)}
@@ -47,6 +62,7 @@ const MarksEntry = () => {
         />
         <input
           type="text"
+          className="form-control mb-2"
           placeholder="Student Name"
           value={studentName}
           onChange={(e) => setStudentName(e.target.value)}
@@ -56,15 +72,18 @@ const MarksEntry = () => {
           <input
             key={index}
             type="number"
+            className="form-control mb-2"
             placeholder={`Subject ${index + 1}`}
             value={mark}
             onChange={(e) => handleMarksChange(index, e.target.value)}
             required
           />
         ))}
-        <button type="submit" className="btn btn secondary">Save Marks</button>
+        <button type="submit" className="btn btn-primary w-100 mt-3">
+          Save Marks
+        </button>
       </form>
-      {message && <p>{message}</p>}
+      {message && <p className="text-center mt-3 text-info">{message}</p>}
     </div>
   );
 };
