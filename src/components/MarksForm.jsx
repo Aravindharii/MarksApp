@@ -23,7 +23,7 @@ const MarksForm = ({ onMarksSubmitted }) => {
 
     try {
       const formattedMarks = marks.map((mark) => Number(mark) || 0);
-      await axios.post("http://localhost:5000/marks", { studentId, studentName, marks: formattedMarks });
+      await axios.post("https://marksapp.onrender.com", { studentId, studentName, marks: formattedMarks });
       onMarksSubmitted(studentId);
       alert("Marks saved successfully!");
     } catch (error) {
