@@ -8,6 +8,9 @@ const Report = () => {
   const [loading, setLoading] = useState(false);
   const [showAllReports, setShowAllReports] = useState(false);
 
+  // ✅ Replace "localhost" with your live backend URL
+  const API_BASE_URL = "https://marksapp.onrender.com";
+
   const fetchStudent = async () => {
     if (!studentId.trim()) {
       setError("Please enter a Student ID.");
@@ -16,7 +19,7 @@ const Report = () => {
     setError("");
     setLoading(true); // Set loading to true while fetching
     try {
-      const response = await fetch(`http://localhost:5000/marks/${studentId}`);
+      const response = await fetch(`${API_BASE_URL}/marks/${studentId}`);
       if (!response.ok) throw new Error("Student not found");
       const data = await response.json();
       setStudent(data);
@@ -32,7 +35,7 @@ const Report = () => {
     setError("");
     setLoading(true); // Set loading to true while fetching
     try {
-      const response = await fetch("http://localhost:5000/marks");
+      const response = await fetch(`${API_BASE_URL}/marks`);
       const data = await response.json();
       setStudents(data);
       setShowAllReports(true);
