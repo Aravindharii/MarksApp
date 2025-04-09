@@ -16,7 +16,7 @@ const MarksEntry = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/marks", {
+      const response = await fetch("https://marksapp.onrender.com", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
